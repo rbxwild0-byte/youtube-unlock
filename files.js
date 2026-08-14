@@ -4,7 +4,7 @@ const files = {
         "https://www.mediafire.com/",
 
     video2:
-        "PUT-YOUR-SECOND-FILE-LINK-HERE",
+        "https://www.youtube.com/",
 
     video3:
         "PUT-YOUR-THIRD-FILE-LINK-HERE"
