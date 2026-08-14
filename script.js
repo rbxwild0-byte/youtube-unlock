@@ -5,7 +5,7 @@ const message = document.getElementById("message");
 
 
 // =====================================
-// YOUR YOUTUBE CHANNEL
+// رابط قناتك
 // =====================================
 
 const youtubeChannel =
@@ -13,7 +13,9 @@ const youtubeChannel =
 
 
 // =====================================
-// GET FILE NAME FROM URL
+// قراءة اسم الملف من الرابط
+// مثال:
+// ?file=video1
 // =====================================
 
 const params = new URLSearchParams(
@@ -24,79 +26,42 @@ const fileName = params.get("file");
 
 
 // =====================================
-// GET FILE LINK
+// الحصول على رابط الملف
 // =====================================
 
 const fileLink = files[fileName];
 
 
 // =====================================
-// REQUIRED TIME
+// الوقت المطلوب
+// 15 ثانية
 // =====================================
 
 const REQUIRED_TIME = 15000;
 
 
 // =====================================
-// STORAGE KEY
+// حالة المستخدم
 // =====================================
 
-const storageKey =
-    `youtube_unlock_${fileName}`;
+// الوقت الذي تم جمعه حتى الآن
+let elapsedTime = 0;
 
+// هل المستخدم ضغط Subscribe مرة واحدة؟
+let subscribedStarted = false;
 
-// =====================================
-// LOAD SAVED PROGRESS
-// =====================================
-
-let progress;
-
-try {
-
-    progress = JSON.parse(
-        localStorage.getItem(storageKey)
-    );
-
-} catch (error) {
-
-    progress = null;
-}
-
-
-if (!progress) {
-
-    progress = {
-        started: false,
-        elapsed: 0,
-        completed: false
-    };
-}
-
-
-// =====================================
-// SESSION VARIABLES
-// =====================================
-
+// هل نحن حاليًا ننتظر رجوع المستخدم؟
 let waitingForReturn = false;
 
+// وقت خروج المستخدم من الموقع
 let leftAt = null;
 
-
-// =====================================
-// SAVE PROGRESS
-// =====================================
-
-function saveProgress() {
-
-    localStorage.setItem(
-        storageKey,
-        JSON.stringify(progress)
-    );
-}
+// هل تم فتح الرابط النهائي؟
+let completed = false;
 
 
 // =====================================
-// CHECK FILE
+// التأكد من وجود الملف
 // =====================================
 
 if (!fileLink) {
@@ -113,78 +78,49 @@ if (!fileLink) {
 
 
     // =====================================
-    // RESTORE COMPLETED STATE
-    // =====================================
-
-    if (progress.completed) {
-
-        unlockBtn.disabled = false;
-
-        unlockBtn.textContent =
-            "🔓 Unlock";
-
-        unlockBtn.classList.add(
-            "unlock-ready"
-        );
-
-        message.textContent =
-            "You're ready! Click Unlock to continue.";
-
-        status.textContent = "";
-
-    }
-
-
-    // =====================================
-    // SUBSCRIBE BUTTON
+    // زر Subscribe
     // =====================================
 
     subscribeBtn.addEventListener(
         "click",
         () => {
 
-            // Already completed
-            if (progress.completed) {
+            // لو المستخدم ضغط Subscribe قبل كده
+            // لا نفتح YouTube مرة أخرى
+            if (subscribedStarted) {
                 return;
             }
 
 
             // =================================
-            // START ONLY ONCE
+            // تسجيل أن العملية بدأت
             // =================================
 
-            if (!progress.started) {
-
-                progress.started = true;
-
-                progress.elapsed = 0;
-
-                saveProgress();
-            }
+            subscribedStarted = true;
 
 
             // =================================
-            // DON'T RESET PREVIOUS TIME
+            // تعطيل الزر
             // =================================
 
             subscribeBtn.disabled = true;
 
-            unlockBtn.disabled = true;
 
-            unlockBtn.textContent =
-                "🔒 Unlock";
+            // =================================
+            // تغيير الرسالة
+            // =================================
+
+            message.textContent =
+                "Subscribe to our YouTube channel and enable all notifications.";
+
 
             status.textContent = "";
 
             status.className = "";
 
 
-            message.textContent =
-                "Subscribe to our YouTube channel and enable all notifications.";
-
-
             // =================================
-            // RECORD DEPARTURE
+            // تسجيل وقت الخروج
             // =================================
 
             leftAt = Date.now();
@@ -193,30 +129,53 @@ if (!fileLink) {
 
 
             // =================================
-            // OPEN YOUTUBE
+            // فتح YouTube
             // =================================
 
             window.open(
                 youtubeChannel,
                 "_blank"
             );
-
         }
     );
 
 
     // =====================================
-    // USER RETURNS TO WEBSITE
+    // مراقبة رجوع المستخدم للموقع
     // =====================================
 
     document.addEventListener(
         "visibilitychange",
         () => {
 
-            if (!waitingForReturn) {
+            // =================================
+            // المستخدم خرج من الموقع
+            // =================================
+
+            if (
+                document.visibilityState ===
+                "hidden"
+            ) {
+
+                // لازم يكون ضغط Subscribe أولاً
+                if (
+                    subscribedStarted &&
+                    !completed
+                ) {
+
+                    // تسجيل وقت الخروج
+                    leftAt = Date.now();
+
+                    waitingForReturn = true;
+                }
+
                 return;
             }
 
+
+            // =================================
+            // المستخدم رجع للموقع
+            // =================================
 
             if (
                 document.visibilityState !==
@@ -226,13 +185,14 @@ if (!fileLink) {
             }
 
 
+            // لا يوجد خروج مسجل
             if (!leftAt) {
                 return;
             }
 
 
             // =================================
-            // CALCULATE THIS SESSION
+            // حساب مدة الغياب
             // =================================
 
             const timeAway =
@@ -240,45 +200,41 @@ if (!fileLink) {
 
 
             // =================================
-            // ADD TO PREVIOUS TIME
+            // إضافة الوقت للوقت السابق
             // =================================
 
-            progress.elapsed += timeAway;
+            elapsedTime += timeAway;
 
 
-            // Stop current session
-            waitingForReturn = false;
-
+            // تنظيف حالة الخروج الحالية
             leftAt = null;
 
-
-            // Save progress
-            saveProgress();
+            waitingForReturn = false;
 
 
             // =================================
-            // CHECK 15 SECONDS
+            // هل وصلنا لـ 15 ثانية؟
             // =================================
 
             if (
-                progress.elapsed >=
+                elapsedTime >=
                 REQUIRED_TIME
             ) {
 
-                // Completed
-                progress.completed = true;
-
-                saveProgress();
+                completed = true;
 
 
-                // Enable Unlock
+                // =================================
+                // فتح Unlock
+                // =================================
+
                 unlockBtn.disabled = false;
 
                 unlockBtn.textContent =
                     "🔓 Unlock";
 
 
-                // Restart animation
+                // تشغيل الأنيميشن من جديد
                 unlockBtn.classList.remove(
                     "unlock-ready"
                 );
@@ -290,13 +246,13 @@ if (!fileLink) {
                 );
 
 
+                message.textContent =
+                    "You're ready! Click Unlock to continue.";
+
+
                 status.textContent = "";
 
                 status.className = "";
-
-
-                message.textContent =
-                    "You're ready! Click Unlock to continue.";
 
 
                 return;
@@ -304,40 +260,38 @@ if (!fileLink) {
 
 
             // =================================
-            // NOT ENOUGH TIME YET
+            // لم يكتمل الوقت بعد
             // =================================
 
-            subscribeBtn.disabled = false;
+            subscribeBtn.disabled = true;
 
-            unlockBtn.disabled = true;
 
-            unlockBtn.textContent =
-                "🔒 Unlock";
-
+            // مهم:
+            // لا نطلب منه الضغط على Subscribe مرة ثانية
+            // =================================
 
             status.textContent =
-                "Please subscribe and enable all notifications to unlock the link.";
+                "Please subscribe to unlock the link.";
 
             status.className =
                 "status-error";
 
 
             message.textContent =
-                "Subscribe to our YouTube channel and enable all notifications.";
-
+                "Keep the subscription process open until the link is unlocked.";
         }
     );
 
 
     // =====================================
-    // UNLOCK BUTTON
+    // زر Unlock
     // =====================================
 
     unlockBtn.addEventListener(
         "click",
         () => {
 
-            if (!progress.completed) {
+            if (!completed) {
                 return;
             }
 
@@ -355,7 +309,6 @@ if (!fileLink) {
                 },
                 250
             );
-
         }
     );
 
