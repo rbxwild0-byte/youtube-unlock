@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Subscribe to Unlock</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <!-- Background Effects -->
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <!-- Main Card -->
+    <main class="container">
+
+        <!-- Channel Logo -->
+        <div class="logo-wrapper">
+            <img
+                src="./logo.png"
+                class="logo"
+                alt="Channel Logo"
+            >
+        </div>
+
+        <!-- Title -->
+        <h1>Subscribe to Unlock</h1>
+
+        <!-- Description -->
+        <p id="message">
+            Subscribe to our YouTube channel and enable all notifications to unlock the link.
+        </p>
+
+        <!-- Subscribe Button -->
+        <button id="subscribeBtn" class="subscribe-btn">
+            <span class="youtube-icon">▶</span>
+            Subscribe
+        </button>
+
+        <!-- Status -->
+        <div id="status"></div>
+
+        <!-- Unlock Button -->
+        <button id="unlockBtn" class="unlock-btn" disabled>
+            🔒 Unlock
+        </button>
+
+        <!-- Notification Hint -->
+        <div class="secure-text">
+            🔔 Enable the bell and select <strong>All notifications</strong>
+        </div>
+
+    </main>
+
+    <!-- JavaScript -->
+    <script src="./files.js"></script>
+    <script src="./script.js"></script>
+
+</body>
+</html>

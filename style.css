@@ -1,0 +1,645 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #202020 0%,
+            #0b0b0b 55%,
+            #050505 100%
+        );
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: white;
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+
+/* =================================
+   BACKGROUND GLOW
+================================= */
+
+.background-glow {
+    position: fixed;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    filter: blur(100px);
+
+    opacity: 0.15;
+
+    pointer-events: none;
+}
+
+.glow-one {
+    background: #ff0000;
+
+    top: -120px;
+    left: -100px;
+
+    animation: floatOne 7s ease-in-out infinite;
+}
+
+.glow-two {
+    background: #ff3333;
+
+    bottom: -150px;
+    right: -100px;
+
+    animation: floatTwo 8s ease-in-out infinite;
+}
+
+
+@keyframes floatOne {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(60px, 40px);
+    }
+}
+
+
+@keyframes floatTwo {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-50px, -40px);
+    }
+}
+
+
+/* =================================
+   MAIN CARD
+================================= */
+
+.container {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 42px 28px;
+
+    text-align: center;
+
+    background: rgba(24, 24, 24, 0.92);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.65),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    backdrop-filter: blur(15px);
+
+    position: relative;
+
+    z-index: 2;
+
+    animation:
+        cardEnter 0.8s cubic-bezier(.2, .8, .2, 1);
+}
+
+
+@keyframes cardEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(35px)
+            scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =================================
+   LOGO
+================================= */
+
+.logo-wrapper {
+    width: 175px;
+    height: 175px;
+
+    margin: 0 auto 25px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    animation:
+        logoEnter 1s cubic-bezier(.2, .8, .2, 1);
+}
+
+
+.logo-wrapper::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -7px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff0000,
+            #ff4d4d,
+            #990000
+        );
+
+    opacity: 0.9;
+
+    z-index: -1;
+
+    animation:
+        logoGlow 2.5s ease-in-out infinite;
+}
+
+
+.logo {
+    width: 175px;
+    height: 175px;
+
+    display: block;
+
+    object-fit: contain;
+
+    object-position: center;
+
+    border-radius: 50%;
+
+    background: #111;
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.5);
+}
+
+
+@keyframes logoEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            scale(0.5)
+            rotate(-8deg);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            rotate(0);
+    }
+}
+
+
+@keyframes logoGlow {
+
+    0%,
+    100% {
+        transform: scale(1);
+
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.06);
+
+        opacity: 1;
+    }
+}
+
+
+/* =================================
+   TITLE
+================================= */
+
+h1 {
+    font-size: 29px;
+
+    font-weight: 700;
+
+    margin-bottom: 14px;
+
+    letter-spacing: -0.5px;
+
+    animation:
+        textEnter 0.8s 0.2s both;
+}
+
+
+@keyframes textEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =================================
+   DESCRIPTION
+================================= */
+
+p {
+    color: #999;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    margin-bottom: 27px;
+
+    animation:
+        textEnter 0.8s 0.3s both;
+}
+
+
+/* =================================
+   BUTTONS
+================================= */
+
+button {
+    width: 100%;
+
+    height: 55px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+button::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 60%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.25),
+            transparent
+        );
+
+    transform:
+        skewX(-20deg);
+
+    transition:
+        left 0.6s ease;
+}
+
+
+button:hover::after {
+    left: 140%;
+}
+
+
+/* =================================
+   SUBSCRIBE BUTTON
+================================= */
+
+.subscribe-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #ff0000,
+            #d90000
+        );
+
+    color: white;
+
+    box-shadow:
+        0 8px 25px rgba(255, 0, 0, 0.25);
+
+    animation:
+        buttonEnter 0.8s 0.4s both,
+        subscribePulse 2.5s 1.5s infinite;
+}
+
+
+.subscribe-btn:hover {
+    transform:
+        translateY(-3px)
+        scale(1.01);
+
+    box-shadow:
+        0 12px 35px rgba(255, 0, 0, 0.4);
+}
+
+
+.subscribe-btn:active {
+    transform:
+        scale(0.97);
+}
+
+
+.subscribe-btn:disabled {
+    background: #555;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+.youtube-icon {
+    display: inline-block;
+
+    margin-right: 8px;
+
+    font-size: 14px;
+}
+
+
+@keyframes subscribePulse {
+
+    0%,
+    70%,
+    100% {
+        box-shadow:
+            0 8px 25px rgba(255, 0, 0, 0.25);
+    }
+
+    35% {
+        box-shadow:
+            0 8px 35px rgba(255, 0, 0, 0.55);
+    }
+}
+
+
+@keyframes buttonEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =================================
+   STATUS
+================================= */
+
+#status {
+    min-height: 26px;
+
+    margin-top: 17px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+
+    transition:
+        all 0.3s ease;
+}
+
+
+.status-error {
+    color: #ff5252;
+
+    animation:
+        shake 0.4s ease;
+}
+
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    75% {
+        transform: translateX(6px);
+    }
+}
+
+
+/* =================================
+   UNLOCK BUTTON
+================================= */
+
+.unlock-btn {
+    margin-top: 5px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d866,
+            #00a94f
+        );
+
+    color: white;
+
+    box-shadow:
+        0 8px 25px rgba(0, 200, 83, 0.2);
+}
+
+
+.unlock-btn:hover:not(:disabled) {
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 35px rgba(0, 200, 83, 0.4);
+}
+
+
+.unlock-btn:active:not(:disabled) {
+    transform:
+        scale(0.97);
+}
+
+
+.unlock-btn:disabled {
+    background: #303030;
+
+    color: #666;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* =================================
+   UNLOCK ANIMATION
+================================= */
+
+.unlock-ready {
+    animation:
+        unlockAppear 0.7s cubic-bezier(.2, .8, .2, 1);
+}
+
+
+@keyframes unlockAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(20px)
+            scale(0.94);
+    }
+
+    60% {
+        transform:
+            translateY(-4px)
+            scale(1.02);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =================================
+   BOTTOM TEXT
+================================= */
+
+.secure-text {
+    margin-top: 20px;
+
+    color: #666;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.secure-text strong {
+    color: #888;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        padding: 35px 20px;
+
+        border-radius: 20px;
+    }
+
+    .logo-wrapper,
+    .logo {
+        width: 150px;
+        height: 150px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    button {
+        height: 53px;
+    }
+}
