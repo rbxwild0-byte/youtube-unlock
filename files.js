@@ -1,7 +1,7 @@
 const files = {
 
     video1:
-        "PUT-YOUR-FIRST-FILE-LINK-HERE",
+        "https://www.mediafire.com/",
 
     video2:
         "PUT-YOUR-SECOND-FILE-LINK-HERE",
